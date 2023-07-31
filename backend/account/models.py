@@ -1,8 +1,10 @@
+from typing import Optional
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin, Permission, Group
+# from django.contrib.auth.backends import BaseBackend
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, *args, **kwargs):
+    def create_user(self, email, password=None):
         if not email:
             raise ValueError('Email is required')
         if not password:
@@ -10,8 +12,6 @@ class CustomUserManager(BaseUserManager):
         try:
             user = self.model(
                 email = self.normalize_email(email),
-                *args,
-                **kwargs
             )
             user.set_password(password)
             user.save()
@@ -33,22 +33,27 @@ class CustomUserManager(BaseUserManager):
             return user
         except:
             raise ValueError('An Error Occured Please Try Again')
+        
+
 
 
 
 class CustomUser(AbstractUser, PermissionsMixin):
+    # name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length = 200)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, related_name='user_groups', blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name='user_permissions', blank=True)
+    # username = None
+
     objects = CustomUserManager()
+
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.username
+        return self.email
 
   

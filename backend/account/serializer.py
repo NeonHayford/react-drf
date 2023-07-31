@@ -2,13 +2,14 @@ from .models import CustomUser
 from rest_framework import serializers, validators
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model, authenticate, models
+from django.contrib.auth.models import User
 
 
 class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email','password',)
+        fields = ('id', 'username', 'email','password',)
         extra_kwargs = {
             'password':{'write_only':True},
             'email':{'required':True,
@@ -21,24 +22,25 @@ class RegisterSerializer(serializers.ModelSerializer):
             }
         }
     
-    def create(self, validated_data):
-        username = validated_data.get('username')
-        email = validated_data.get('email')
-        password = validated_data.get('password')
-        user = get_user_model().objects.create_user(username = username, email = email, password = password)
-        user.save()
-        return user
+    # def create(self, validated_data):
+    #     username = validated_data.get('username')
+    #     email = validated_data.get('email')
+    #     password = validated_data.get('password')
+    #     user = User.objects.create(username = username, email = email, password = password)
+    #     user.save()
+    #     return user
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(max_length=255)
+    email = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
-    def check_user(self, validated_data):
-        user = authenticate(email = validated_data['email'], password = validated_data['password'])
+    def check_user(self, email, password):
+        user = authenticate(email = email, password = password)
         if not user:
             raise ValidationError('invalid email or password')
         return user
+    
         
 
 class UserSerializer(serializers.ModelSerializer):

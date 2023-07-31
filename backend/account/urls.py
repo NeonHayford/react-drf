@@ -10,7 +10,7 @@ urlpatterns = [
     path('login', signupView.as_view()),
     path('logout', logoutView.as_view()),
     path('user', userView.as_view()),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    path('token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh', TokenRefreshView.as_view(), name='token_refresh')
 ]
 
