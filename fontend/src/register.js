@@ -1,4 +1,4 @@
-// import './App.css';
+import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { useState } from 'react';
 import './input.css';
@@ -8,60 +8,46 @@ axios.default.xsrfCookieName = 'csrftoken';
 axios.default.xsrfHeaderName = 'X-CSRFToken';
 axios.default.withCredentials = true;
 
-
 const client = axios.create({
-  baseURL: 'http://127.0.0.1:8000'
+  baseURL: 'http://127.0.0.1:8000/'
 });
 
 
-// function handleClick(){
-//   if (validateForm()) {
-//     try {
-//       const data = { name: username, email, password }
-//     setLoading(!loading)
-//       const response = client.post('registerUser', data)
-//       if(response.data.success === true){
-//         Cookies.set('userId', response.data.user._id)
-//         toast.success('account created successfully')
-//       setTimeout(() => {
-//         dispatch(increaseCount())
-//       }, 4000);
-//     }
-//     setTimeout(() => {
-//       setLoading(true)
-//     }, 4000);
-      
-//     } catch (error) {
-//       const err = error.response.data.message
-//       toast.warn(err)
-//       setTimeout(() => {
-//         setLoading(true)
-//       }, 5000);
-//     }
-    
-//   }
-// }
-
 
 function Register() {
-  const [currentUser, setCurrentUser] = useState();
+  const navigateToDashboard = useNavigate();
+  // const [currentUser, setCurrentUser] = useState();
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
 
-  function submitRegistration(e){
+  function submitRegistration(e) {
     e.preventDefault();
-    client.post('/api/signup', {
-        username: username,
+    try {
+      const userData = {
+        first_name: first_name,
+        last_name: last_name,
         email: email,
         password: password
-      }
-    ).then(function(response){
-      setCurrentUser(true); 
-    });
-  }
+      };
   
+      client.post('auth/users/', userData).then(response => {
+        console.log(response);
+        navigateToDashboard('/');
+      });
+    } catch (e) {
+      console.error('Axios error:', e);
+      if (e.response) {
+        console.log(e.response.data);
+      } else if (e.request) {
+        console.log(e.request);
+      } else {
+        console.log('Error', e.message);
+      }
+    }
+  }
   
 
 
@@ -83,18 +69,34 @@ function Register() {
         
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={submitRegistration} className="space-y-6" action="#" method="POST">
+          <form onSubmit={submitRegistration} className="space-y-6" action="#" method="POST" encType='multipart/form-data'>
 
           <div>
-              <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                Username
+              <label htmlFor="first_name" className="block text-sm font-medium leading-6 text-gray-900">
+                Firstname
               </label>
               <div className="mt-2">
                 <input
-                  id="username"
-                  name="username"
+                  id="first_name"
+                  name="firstname"
                   type="text"
-                  onChange={e=>setUsername(e.target.value)}
+                  onChange={e=>setFirstName(e.target.value)}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="last_name" className="block text-sm font-medium leading-6 text-gray-900">
+                Lastname
+              </label>
+              <div className="mt-2">
+                <input
+                  id="last_name"
+                  name="lastname"
+                  type="text"
+                  onChange={e=>setLastName(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />

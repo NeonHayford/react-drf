@@ -44,12 +44,10 @@ export default function Dashboard() {
 
     function setAuth(){
         if (setRegistrationToggle){
-            const authentcation = document.getElementById('authentication');
-            return authentcation;
+            return false;
         }
         else{
-          const menuButton = document.getElementById('Menu');
-          return menuButton;
+          return true;
         }
     }
 

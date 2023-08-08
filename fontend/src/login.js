@@ -1,33 +1,60 @@
-// import './App.css';
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './input.css';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 axios.default.xsrfCookieName = 'csrftoken';
 axios.default.xsrfHeaderName = 'X-CSRFToken';
 axios.default.withCredentials = true;
 
+
 const client = axios.create({
-  baseURL: 'http://127.0.0.1:8000'
+  baseURL: 'http://127.0.0.1:8000/'
 });
 
 function Login() {
-
-  const [currentUser, setCurrentUser] = useState();
+  const navigate = useNavigate();
+  // const [currentUser, setCurrentUser] = useState();
   // const [registrationToggle, setRegistrationToggle] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  function submitLogin(e){
+  // function submitLogin(e){
+  //   e.preventDefault();
+    
+  //   client.post('auth/jwt/create', {
+  //       email: email,
+  //       password: password
+  //     }
+  //   )
+  //   // .then(function(response){
+  //   //   setCurrentUser(true);
+  //   // })
+  // }
+
+  function submitLogin(e) {
     e.preventDefault();
-    client.post('/api/login', {
+    try {
+      const userData = {
         email: email,
         password: password
+      };
+  
+      client.post('auth/jwt/create', userData).then(response => {
+        console.log(response);
+        navigate('/');
+      });
+    } catch (e) {
+      console.error('Axios error:', e);
+      if (e.response) {
+        console.log(e.response.data);
+      } else if (e.request) {
+        console.log(e.request);
+      } else {
+        console.log('Error', e.message);
       }
-    ).then(function(response){
-      setCurrentUser(true);
-    })
+    }
   }
 
   return (
@@ -46,7 +73,7 @@ function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={submitLogin} className="space-y-6" action="#" method="POST">
+          <form onSubmit={submitLogin} className="space-y-6" action="#" method="POST" encType='multipart/form-data'>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email

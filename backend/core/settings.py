@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'djoser',
     'account'
 ]
@@ -67,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -148,9 +150,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DJOSER = {
     'SERIALIZERS': {
-        'user_create' : 'account.serializers.RegisterSerialiser'
+        'user_create' : 'account.serializers.RegisterSerializer'
     }
 }
 
 
 AUTH_USER_MODEL = 'account.CustomUser' # create a custom user model # it is really needed
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    # 'http://localhost:3000//signin',
+    # 'http://localhost:3000//signup',
+    # 'http://192.168.14.79:3000'
+]

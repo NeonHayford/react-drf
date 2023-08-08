@@ -5,7 +5,7 @@ from djoser.serializers import UserCreateSerializer
 from django.contrib.auth.models import User
 
 
-class RegisterSerialiser(UserCreateSerializer):
+class RegisterSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         
         fields = ['id', 'first_name', 'last_name', 'email', 'password']
@@ -16,8 +16,8 @@ class ChangePasswordSerializer(serializers.Serializer):
     password  = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only = True)
     password_confirmation  = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only = True)
 
-    class Meta:
-        fields = ['password', 'password_confirmation']
+    # class Meta:
+    #     fields = ['password', 'password_confirmation']
 
     # def validate(self, attrs):
     #     password = attrs.get('password')
