@@ -15,23 +15,8 @@ const client = axios.create({
 
 function Login() {
   const navigate = useNavigate();
-  // const [currentUser, setCurrentUser] = useState();
-  // const [registrationToggle, setRegistrationToggle] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  // function submitLogin(e){
-  //   e.preventDefault();
-    
-  //   client.post('auth/jwt/create', {
-  //       email: email,
-  //       password: password
-  //     }
-  //   )
-  //   // .then(function(response){
-  //   //   setCurrentUser(true);
-  //   // })
-  // }
 
   function submitLogin(e) {
     e.preventDefault();

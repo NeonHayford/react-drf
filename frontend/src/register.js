@@ -16,7 +16,6 @@ const client = axios.create({
 
 function Register() {
   const navigateToDashboard = useNavigate();
-  // const [currentUser, setCurrentUser] = useState();
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
